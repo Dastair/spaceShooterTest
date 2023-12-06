@@ -1,0 +1,7 @@
+[gd_resource type="Resource" script_class="MoveStats" load_steps=2 format=3 uid="uid://bvj8garcay2fm"]
+
+[ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/moveStats.gd" id="1_b5d1g"]
+
+[resource]
+script = ExtResource("1_b5d1g")
+speed = 100

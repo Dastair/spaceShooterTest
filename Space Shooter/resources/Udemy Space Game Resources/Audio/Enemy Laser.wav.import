@@ -1,0 +1,24 @@
+[remap]
+
+importer="wav"
+type="AudioStreamWAV"
+uid="uid://hh7wbnf30l4g"
+path="res://.godot/imported/Enemy Laser.wav-a9b3c5e1149e89fe5d4a487bc4bbf57a.sample"
+
+[deps]
+
+source_file="res://resources/Udemy Space Game Resources/Audio/Enemy Laser.wav"
+dest_files=["res://.godot/imported/Enemy Laser.wav-a9b3c5e1149e89fe5d4a487bc4bbf57a.sample"]
+
+[params]
+
+force/8_bit=false
+force/mono=false
+force/max_rate=false
+force/max_rate_hz=44100
+edit/trim=false
+edit/normalize=false
+edit/loop_mode=0
+edit/loop_begin=0
+edit/loop_end=-1
+compress/mode=0
