@@ -1,8 +1,15 @@
-[gd_scene load_steps=2 format=3 uid="uid://dwuwnygam3xsy"]
+[gd_scene load_steps=4 format=3 uid="uid://dwuwnygam3xsy"]
 
 [ext_resource type="PackedScene" uid="uid://bvbt0tlmvdilo" path="res://playerShip/ship.tscn" id="1_7sfhm"]
+[ext_resource type="PackedScene" uid="uid://da0btb664jxva" path="res://galaxy_defiance_resources-main/effects/space_background.tscn" id="2_ryobp"]
+[ext_resource type="PackedScene" uid="uid://cgc31o177k2xn" path="res://enemies/enemy_generator.tscn" id="4_78kun"]
 
 [node name="World" type="Node2D"]
 
 [node name="Ship" parent="." instance=ExtResource("1_7sfhm")]
 position = Vector2(80, 216)
+
+[node name="SpaceBackground" parent="." instance=ExtResource("2_ryobp")]
+
+[node name="EnemyGenerator" parent="." instance=ExtResource("4_78kun")]
+position = Vector2(80, -16)

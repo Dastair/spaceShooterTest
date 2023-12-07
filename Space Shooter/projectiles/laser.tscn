@@ -1,10 +1,14 @@
-[gd_scene load_steps=6 format=3 uid="uid://ywlap2aqsnls"]
+[gd_scene load_steps=8 format=3 uid="uid://ywlap2aqsnls"]
 
 [ext_resource type="Script" path="res://projectiles/laser.gd" id="1_gklqq"]
 [ext_resource type="Texture2D" uid="uid://cpxxycfhjgg6s" path="res://galaxy_defiance_resources-main/assets/laser_small.png" id="1_wjc2p"]
 [ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/moveComponent.gd" id="2_obxlx"]
 [ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/scale_component.gd" id="4_62vh2"]
 [ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/flash_component.gd" id="5_qo4tg"]
+[ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/hitbox_component.gd" id="6_loefi"]
+
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_31c1a"]
+size = Vector2(4, 8)
 
 [node name="Laser" type="Node2D"]
 script = ExtResource("1_gklqq")
@@ -30,3 +34,12 @@ scale_duration = 1.0
 script = ExtResource("5_qo4tg")
 sprite = NodePath("../Sprite2D")
 flash_duration = 0.1
+
+[node name="HitboxComponent" type="Area2D" parent="."]
+collision_layer = 0
+collision_mask = 2
+script = ExtResource("6_loefi")
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="HitboxComponent"]
+position = Vector2(0, 1)
+shape = SubResource("RectangleShape2D_31c1a")

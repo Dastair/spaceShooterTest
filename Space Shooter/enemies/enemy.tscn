@@ -1,0 +1,64 @@
+[gd_scene load_steps=13 format=3 uid="uid://d2ct01e6c237y"]
+
+[ext_resource type="Script" path="res://enemies/enemy.gd" id="1_koye5"]
+[ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/moveComponent.gd" id="2_1akgn"]
+[ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/stats_component.gd" id="3_3ja6o"]
+[ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/scale_component.gd" id="4_wodmg"]
+[ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/shake_component.gd" id="5_ui07j"]
+[ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/flash_component.gd" id="6_wagpf"]
+[ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/hurtbox_component.gd" id="7_j56es"]
+[ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/hitbox_component.gd" id="8_p47aa"]
+[ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/hurt_component.gd" id="9_5l2n3"]
+[ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/spawner_component.gd" id="10_fn4xh"]
+[ext_resource type="PackedScene" uid="uid://ccth4wla5yuxp" path="res://galaxy_defiance_resources-main/effects/explosion_effect.tscn" id="11_5mjpg"]
+[ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/destroyed_component.gd" id="12_3qwnt"]
+
+[node name="Enemy" type="Node2D"]
+script = ExtResource("1_koye5")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+
+[node name="MoveComponent" type="Node" parent="." node_paths=PackedStringArray("actor")]
+script = ExtResource("2_1akgn")
+actor = NodePath("..")
+
+[node name="StatsComponent" type="Node" parent="."]
+script = ExtResource("3_3ja6o")
+
+[node name="VisibleOnScreenNotifier2D" type="VisibleOnScreenNotifier2D" parent="."]
+
+[node name="ScaleComponent" type="Node" parent="." node_paths=PackedStringArray("sprite")]
+script = ExtResource("4_wodmg")
+sprite = NodePath("../AnimatedSprite2D")
+
+[node name="ShakeComponent" type="Node" parent="." node_paths=PackedStringArray("node")]
+script = ExtResource("5_ui07j")
+node = NodePath("../AnimatedSprite2D")
+
+[node name="FlashComponent" type="Node" parent="." node_paths=PackedStringArray("sprite")]
+script = ExtResource("6_wagpf")
+sprite = NodePath("../AnimatedSprite2D")
+
+[node name="HurtboxComponent" type="Area2D" parent="."]
+collision_layer = 2
+collision_mask = 0
+script = ExtResource("7_j56es")
+
+[node name="HitboxComponent" type="Area2D" parent="."]
+collision_layer = 0
+script = ExtResource("8_p47aa")
+
+[node name="HurtComponent" type="Node" parent="." node_paths=PackedStringArray("stats_component", "hurtbox_component")]
+script = ExtResource("9_5l2n3")
+stats_component = NodePath("../StatsComponent")
+hurtbox_component = NodePath("../HurtboxComponent")
+
+[node name="SpawnerComponent" type="Node2D" parent="."]
+script = ExtResource("10_fn4xh")
+scene = ExtResource("11_5mjpg")
+
+[node name="DestroyedComponent" type="Node" parent="." node_paths=PackedStringArray("actor", "stats_component", "destroy_effect_spawner_component")]
+script = ExtResource("12_3qwnt")
+actor = NodePath("..")
+stats_component = NodePath("../StatsComponent")
+destroy_effect_spawner_component = NodePath("../SpawnerComponent")

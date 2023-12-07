@@ -1,14 +1,20 @@
-[gd_scene load_steps=14 format=3 uid="uid://bvbt0tlmvdilo"]
+[gd_scene load_steps=27 format=3 uid="uid://bvbt0tlmvdilo"]
 
 [ext_resource type="Texture2D" uid="uid://4ckwylnwjxin" path="res://galaxy_defiance_resources-main/assets/ship.png" id="1_dic66"]
 [ext_resource type="Script" path="res://playerShip/ship.gd" id="1_gqrw4"]
 [ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/moveComponent.gd" id="2_ah7yh"]
+[ext_resource type="Texture2D" uid="uid://bhe10whgky8fl" path="res://galaxy_defiance_resources-main/assets/ship_flame.png" id="2_hvjg2"]
 [ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/moveInputComponent.gd" id="3_gqiup"]
 [ext_resource type="Resource" uid="uid://bvj8garcay2fm" path="res://playerShip/shipMoveStats.tres" id="4_ychio"]
 [ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/position_clamp_component.gd" id="5_8g5q6"]
 [ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/spawner_component.gd" id="7_4k1ti"]
 [ext_resource type="PackedScene" uid="uid://ywlap2aqsnls" path="res://projectiles/laser.tscn" id="8_hgfrb"]
 [ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/scale_component.gd" id="9_ntsbi"]
+[ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/stats_component.gd" id="11_usb1a"]
+[ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/hurtbox_component.gd" id="12_4ft7r"]
+[ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/hurt_component.gd" id="12_84t6n"]
+[ext_resource type="Script" path="res://galaxy_defiance_resources-main/components/destroyed_component.gd" id="13_vd3d0"]
+[ext_resource type="PackedScene" uid="uid://ccth4wla5yuxp" path="res://galaxy_defiance_resources-main/effects/explosion_effect.tscn" id="15_dunrw"]
 
 [sub_resource type="AtlasTexture" id="AtlasTexture_3hdna"]
 atlas = ExtResource("1_dic66")
@@ -49,14 +55,82 @@ animations = [{
 "speed": 5.0
 }]
 
+[sub_resource type="AtlasTexture" id="AtlasTexture_ywpcx"]
+atlas = ExtResource("2_hvjg2")
+region = Rect2(16, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_nwf0o"]
+atlas = ExtResource("2_hvjg2")
+region = Rect2(16, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_kkbs5"]
+atlas = ExtResource("2_hvjg2")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_c6cb7"]
+atlas = ExtResource("2_hvjg2")
+region = Rect2(32, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_6dmur"]
+atlas = ExtResource("2_hvjg2")
+region = Rect2(32, 16, 16, 16)
+
+[sub_resource type="AtlasTexture" id="AtlasTexture_dghhu"]
+atlas = ExtResource("2_hvjg2")
+region = Rect2(32, 0, 16, 16)
+
+[sub_resource type="SpriteFrames" id="SpriteFrames_4ylvd"]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_ywpcx")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_nwf0o")
+}],
+"loop": true,
+"name": &"center",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_kkbs5")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_c6cb7")
+}],
+"loop": true,
+"name": &"left",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_6dmur")
+}, {
+"duration": 1.0,
+"texture": SubResource("AtlasTexture_dghhu")
+}],
+"loop": true,
+"name": &"right",
+"speed": 10.0
+}]
+
 [node name="Ship" type="Node2D"]
 position = Vector2(0, 216)
 script = ExtResource("1_gqrw4")
 
-[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+[node name="Anchor" type="Node2D" parent="."]
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="Anchor"]
 position = Vector2(0, -1)
 sprite_frames = SubResource("SpriteFrames_x7ygx")
 animation = &"center"
+autoplay = "center"
+
+[node name="FlameAnimation" type="AnimatedSprite2D" parent="Anchor"]
+position = Vector2(0, 14)
+sprite_frames = SubResource("SpriteFrames_4ylvd")
+animation = &"left"
 autoplay = "center"
 
 [node name="MoveComponent" type="Node" parent="." node_paths=PackedStringArray("actor")]
@@ -88,4 +162,29 @@ autostart = true
 
 [node name="ScaleComponent" type="Node" parent="." node_paths=PackedStringArray("sprite")]
 script = ExtResource("9_ntsbi")
-sprite = NodePath("../AnimatedSprite2D")
+sprite = NodePath("../Anchor")
+
+[node name="StatsComponent" type="Node" parent="."]
+script = ExtResource("11_usb1a")
+
+[node name="HurtComponent" type="Node" parent="." node_paths=PackedStringArray("stats_component", "hurtbox_component")]
+script = ExtResource("12_84t6n")
+stats_component = NodePath("../StatsComponent")
+hurtbox_component = NodePath("../HurtboxComponent")
+
+[node name="DestroyedComponent" type="Node" parent="." node_paths=PackedStringArray("actor", "stats_component", "destroy_effect_spawner_component")]
+script = ExtResource("13_vd3d0")
+actor = NodePath("..")
+stats_component = NodePath("../StatsComponent")
+destroy_effect_spawner_component = NodePath("../Explode")
+
+[node name="HurtboxComponent" type="Area2D" parent="."]
+collision_mask = 0
+script = ExtResource("12_4ft7r")
+
+[node name="CollisionPolygon2D" type="CollisionPolygon2D" parent="HurtboxComponent"]
+polygon = PackedVector2Array(-8, 1, -3, -4, -3, -5, -1, -8, 1, -8, 3, -5, 3, -4, 8, 1, 8, 3, 5, 3, 5, 6, -5, 6, -5, 3, -8, 3)
+
+[node name="Explode" type="Node2D" parent="."]
+script = ExtResource("7_4k1ti")
+scene = ExtResource("15_dunrw")
